@@ -10,7 +10,8 @@ class Mahasiswa extends Model
 {
     //
     protected $table = 'mahasiswa';
-    protected $primafykey = 'nim';
+    protected $primaryKey = 'nim';
+    public $incrementing = false;
     protected $ketType = 'string';
 
     protected $fillable = [

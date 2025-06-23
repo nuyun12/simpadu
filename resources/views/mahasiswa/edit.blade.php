@@ -36,14 +36,16 @@
                             <h3 class="card-title">Tambah Mahasiswa</h3>
                         </div>
                         <!-- /.card-header -->
-                        <form action="{{ url('mahasiswa') }}" method="post" enctype="multipart/form-data">
+                        <form action="{{ url("mahasiswa/$mahasiswa->nim") }}" method="post" enctype="multipart/form-data">
+                            @method('put')
                             @csrf
                             <!-- /.card-body -->
                             <div class="card-body">
                                 <div class="form-group">
                                     <label for="nim">NIM</label>
                                     <input type="text" name="nim" id="nim" 
-                                        class="form-control @error('nim') is-invalid @enderror">
+                                        class="form-control @error('nim') is-invalid @enderror"
+                                        value="{{ $mahasiswa->nim }}" disabled>
                                     @error('nim')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -51,31 +53,23 @@
                                 @enderror
                             </div>
                                 <div class="form-group">
-                                    <label for="password">Password</label>
-                                    <input type="password" name="password" id="password" 
-                                        class="form-control @error('passsword') is-invalid @enderror">
-                                    @error('password')
-                                    <div class="invalid-feedback">
-                                        {{ $message }}   
-                                </div>
-                                @enderror
-                            </div>
-                                <div class="form-group">
                                     <label for="nama">Nama Mahasiswa</label>
                                     <input type="text" name="nama" id="nama" 
-                                        class="form-control @error('nama') is-invalid @enderror">
+                                        class="form-control @error('nama') is-invalid @enderror"
+                                        value="{{ $mahasiswa->nama }}">
+                                         @error('nama')
                                     <div class="invalid-feedback">
-                                        @error('nama')
                                         {{ $message }}  
                                 </div>
                                 @enderror
                             </div>
                                 <div class="form-group">
-                                    <label for="tanggalLahir">tanggal lahir</label>
+                                    <label for="tanggalLahir">tanggalLahir</label>
                                     <input type="date" name="tanggalLahir" id="tanggalLahir"
-                                         class="form-control @error('tanggalLahir') is-invalid @enderror">
-                                    <div class="invalid-feedback">
+                                         class="form-control @error('tanggalLahir') is-invalid @enderror"
+                                         value="{{ $mahasiswa->tanggalLahir }}">
                                          @error('tanggalLahir')
+                                    <div class="invalid-feedback">
                                         {{ $message }}   
                                 </div>
                                 @enderror
@@ -83,9 +77,10 @@
                                 <div class="form-group">
                                     <label for="telp">telp</label>
                                     <input type="text" name="telp" id="telp"
-                                     class="form-control @error('telp') is-invalid @enderror">
-                                    <div class="invalid-feedback">
-                                         @error('telp')
+                                     class="form-control @error('telp') is-invalid @enderror"
+                                     value="{{ $mahasiswa->telp }}">
+                                     @error('tanggalLahir')
+                                     <div class="invalid-feedback">
                                         {{ $message }}   
                                 </div>
                                 @enderror
@@ -93,9 +88,10 @@
                                 <div class="form-group">
                                     <label for="email">email </label>
                                     <input type="email" name="email" id="email"
-                                     class="form-control @error('email') is-invalid @enderror">
+                                     class="form-control @error('email') is-invalid @enderror"
+                                     value="{{ $mahasiswa->email }}">
+                                    @error('email')
                                     <div class="invalid-feedback">
-                                         @error('email')
                                         {{ $message }}   
                                 </div>
                                 @enderror
@@ -104,7 +100,9 @@
                                     <label for="id_prodi" class="form-label">Prodi</label>
                                     <select class="form-select" name="id_prodi" id="id_prodi">
                                         @foreach ($prodi as $p) : ?>
-                                            <option value="{{ $p->id }}">{{ $p->nama }}</option>
+                                            <option value="{{ $p->id }}"
+                                            {{ $p->id == $mahasiswa->id ? 'SELECTED' : ''}}>
+                                        {{ $p->nama }}</option>
                                         @endforeach
                                     </select>
                                 </div>
