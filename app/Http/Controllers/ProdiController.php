@@ -2,7 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use view;
+use App\Models\Prodi;
+use App\Models\Mahasiswa;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Storage;
 
 class ProdiController extends Controller
 {
@@ -12,6 +17,9 @@ class ProdiController extends Controller
     public function index()
     {
         //
+        $data = ['nama' => 'nuyun', 'foto' => 'avatar.png'];
+        $prodi = Prodi::all();
+        return view('prodi.index', compact('prodi', 'data'));
     }
 
     /**
@@ -20,9 +28,21 @@ class ProdiController extends Controller
     public function create()
     {
         //
-        $data = ['nama' => "nuyun", 'foto' => 'avatar.png'];
-        $prodi = Prodi::all();
-        return view('mahasiswa.create', compact('data', 'prodi'));
+        $request->validate([
+            'kaprodi' => 'required',
+            'jurusan' => 'required',
+        ]);
+
+        prodi::create([
+            'kaprodi' => $kaprodi->kaprodi,
+            'jurusan' => $jurusan->jurusan,
+        ]);
+
+        $data = ['nama' => "nuyun", 'foto' =>  'avatar.png'];
+        return view('prodi.create', compact('data'));
+
+        $allprodi = Prodi::all();
+        return view('prodi.edit', compact('data', 'prodi', 'listprodi', 'allProdi'));
     }
 
     /**
@@ -31,18 +51,22 @@ class ProdiController extends Controller
     public function store(Request $request)
     {
         //
-        $validateData = $request->validate(
-            [
-                'nama' => 'required|max:10',
-                'kaprodi' => 'required',
-                'jurusan' => 'required|max:100',
-
-            ],
-        );
+        $validateData = $request->validate([
+            'nama' => 'required|max:100',
+            'kaprodi' => 'required|max:100',
+            'jurusan' => 'required|max:100',
+            'foto' => 'required|image|file|max:2048',
+        ], [
+            'nama.required' => 'Nama Prodi wajib diisi',
+            'kaprodi.required' => 'Kaprodi wajib diisi',
+            'jurusan.required' => 'Jurusan wajib diisi',
+            'foto.image' => 'File harus berupa gambar',
+        ]);
         if ($request->file('foto')) {
             $validateData['foto'] = $request->file('foto')->store('image');
         }
-        prodi::create($validateData);
+        Prodi::create($validateData);
+        return redirect('/prodi')->with('success', 'Data prodi berhasil ditambahkan');
     }
 
     /**
@@ -51,6 +75,7 @@ class ProdiController extends Controller
     public function show(string $id)
     {
         //
+
     }
 
     /**
@@ -59,6 +84,11 @@ class ProdiController extends Controller
     public function edit(string $id)
     {
         //
+        $data = ['nama' => "nuyun", 'foto' => 'avatar.png'];
+        $prodi = Prodi::find($id);
+        $listjurusan = ['Administrasi Bisnis', 'Teknik Sipil dan Kebumian'];
+        $listprodi = ['Sistem Informasi', 'Teknik Pertambangan', 'Bisnis Digital'];
+        return view('prodi.edit', compact('data', 'prodi', 'listjurusan', 'listprodi'));
     }
 
     /**
@@ -67,6 +97,18 @@ class ProdiController extends Controller
     public function update(Request $request, string $id)
     {
         //
+        $validateData = $request->validate([
+            'nama' => 'required|max:100',
+            'kaprodi' => 'required|max:100',
+            'jurusan' => 'required|max:100',
+        ]);
+
+        $prodi = Prodi::find($id);
+        $prodi->nama = $request->nama;
+        $prodi->jurusan = $request->jurusan;
+        $prodi->kaprodi = $request->kaprodi;
+        $prodi->save();
+        return redirect('/prodi')->with('success', 'Data prodi berhasil diperbarui');
     }
 
     /**
@@ -75,5 +117,8 @@ class ProdiController extends Controller
     public function destroy(string $id)
     {
         //
+        $prodi = Prodi::find($id);
+
+        return redirect('/prodi')->with('success', 'Data prodi berhasil dihapus');
     }
 }

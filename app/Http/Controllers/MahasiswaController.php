@@ -133,10 +133,6 @@ class MahasiswaController extends Controller
     public function destroy(string $id)
     {
         //
-        $mahasiswa = Mahasiswa::find($id);
-        if ($mahasiswa->foto) {
-            storage::delete($mahasiswa->foto);
-        }
         Mahasiswa::destroy($id);
         return redirect('/mahasiswa');
     }
