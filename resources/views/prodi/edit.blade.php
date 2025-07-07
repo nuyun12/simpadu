@@ -54,6 +54,13 @@
                                     </select>
                                     </div>
 
+                                    <div class="form-group">
+                                    <label for="kaprodi">Kaprodi</label>
+                                    <input type="nama" class="form-control">
+                                     </option>
+                                    </select>
+                                    </div>
+
                                  <div class="form-group">
                                    <label for="jurusan">Jurusan</label>
                                     <select name="jurusan" class="form-control">
